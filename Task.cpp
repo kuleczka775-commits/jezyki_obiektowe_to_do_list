@@ -17,3 +17,8 @@ int Task::getId() const
 {
     return id;
 }
+
+int Task::getPriority() const
+{
+    return 0;
+}

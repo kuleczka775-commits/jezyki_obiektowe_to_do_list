@@ -8,6 +8,16 @@ HabitTask::HabitTask(int id, string title, string tag, int intervalDays) : Task(
     cout << "Utworzono nowy nawyk:" << title << "powatarzany co " << intervalDays << " dni" << endl;
 }
 
+int HabitTask::getPriority() const
+{
+    return priority;
+}
+
+void HabitTask::setPriority(int newPriority)
+{
+    priority = newPriority;
+}
+
 void HabitTask::completeHabit()
 {
     currentStreak++;

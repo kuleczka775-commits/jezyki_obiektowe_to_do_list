@@ -18,4 +18,6 @@ public:
     void setStatus(string newStatus);
     string getTitle() const;
     int getId() const;
+
+    virtual int getPriority() const;
 };

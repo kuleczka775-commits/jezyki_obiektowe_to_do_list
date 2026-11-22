@@ -7,3 +7,13 @@ DeadlineTask::DeadlineTask(int id, string title, string tag, string dueDate) : T
 {
     cout << "Utworzono nowe zadanie z terminem:" << title << endl;
 }
+
+int DeadlineTask::getPriority() const
+{
+    return priority;
+}
+
+void DeadlineTask::setPriority(int newPriority)
+{
+    priority = newPriority;
+}
