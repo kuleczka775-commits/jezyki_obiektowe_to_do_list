@@ -14,4 +14,11 @@ public:
 
     int getPriority() const override;
     void setPriority(int newPriority);
+
+    string getDueDate() const;
+    void setDueDate(string newDueDate);
+
+    string getType() const override;
+    string getSummary() const override;
+    string serialize() const override;
 };

@@ -21,4 +21,8 @@ public:
     void toggleSubtask(int index);
     int getProgress() const;
     const vector<pair<string, bool>> &getSubtasks() const;
+
+    string getType() const override;
+    string getSummary() const override;
+    string serialize() const override;
 };

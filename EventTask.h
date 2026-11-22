@@ -23,4 +23,8 @@ public:
     void setStartTime(string newStartTime);
     void setEndTime(string newEndTime);
     void setLocation(string newLocation);
+
+    string getType() const override;
+    string getSummary() const override;
+    string serialize() const override;
 };

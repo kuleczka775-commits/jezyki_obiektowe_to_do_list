@@ -16,4 +16,12 @@ public:
     int getPriority() const override;
     void setPriority(int newPriority);
     void completeHabit();
+
+    int getIntervalDays() const;
+    int getCurrentStreak() const;
+    void setCurrentStreak(int streak);
+
+    string getType() const override;
+    string getSummary() const override;
+    string serialize() const override;
 };

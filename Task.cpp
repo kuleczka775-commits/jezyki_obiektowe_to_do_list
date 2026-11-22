@@ -22,3 +22,13 @@ int Task::getPriority() const
 {
     return 0;
 }
+
+string Task::getTag() const
+{
+    return tag;
+}
+
+string Task::getStatus() const
+{
+    return status;
+}

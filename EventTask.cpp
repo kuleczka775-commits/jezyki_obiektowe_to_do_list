@@ -47,3 +47,18 @@ void EventTask::setLocation(string newLocation)
 {
     location = newLocation;
 }
+
+string EventTask::getType() const
+{
+    return "Wydarzenie";
+}
+
+string EventTask::getSummary() const
+{
+    return date + " (" + startTime + " - " + endTime + ") | Miejsce: " + location;
+}
+
+string EventTask::serialize() const
+{
+    return "Event|" + to_string(id) + "|" + title + "|" + tag + "|" + status + "|" + date + "|" + startTime + "|" + endTime + "|" + location;
+}

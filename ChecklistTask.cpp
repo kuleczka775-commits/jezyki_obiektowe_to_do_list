@@ -60,3 +60,27 @@ const vector<pair<string, bool>> &ChecklistTask::getSubtasks() const
 {
     return subtasks;
 }
+
+string ChecklistTask::getType() const
+{
+    return "Checklista";
+}
+
+string ChecklistTask::getSummary() const
+{
+    return "Postęp: " + to_string(getProgress()) + "% (" + to_string(subtasks.size()) + " podzadań) | Priorytet: " + to_string(priority);
+}
+string ChecklistTask::serialize() const
+{
+    string subtasksString = "";
+    for (size_t i = 0; i < subtasks.size(); i++)
+    {
+        subtasksString += subtasks[i].first + ":" + (subtasks[i].second ? "1" : "0");
+        if (i + 1 < subtasks.size())
+        {
+            subtasksString += ";";
+        }
+    }
+
+    return "Checklist|" + to_string(id) + "|" + title + "|" + tag + "|" + status + "|" + to_string(priority) + "|" + subtasksString;
+}
