@@ -1,0 +1,62 @@
+#include "ChecklistTask.h"
+#include <iostream>
+
+using namespace std;
+
+ChecklistTask::ChecklistTask(int id, string title, string tag, int priority) : Task(id, title, tag), priority(priority)
+{
+    cout << "Utworzono nową listę zadań: " << title << " (priorytet: " << priority << ")" << endl;
+}
+
+int ChecklistTask::getPriority() const
+{
+    return priority;
+}
+
+void ChecklistTask::setPriority(int newPriority)
+{
+    priority = newPriority;
+}
+
+void ChecklistTask::addSubtask(string name, bool isDone = false)
+{
+    subtasks.push_back({name, isDone});
+    cout << "Dodano podzadanie: " << name << endl;
+}
+
+void ChecklistTask::toggleSubtask(int index)
+{
+    if (index >= 0 && index < static_cast<int>(subtasks.size()))
+    {
+        subtasks[index].second = !subtasks[index].second;
+        cout << "Zmieniono status podzadania '" << subtasks[index].first << "' na: " << (subtasks[index].second ? "Zrobione" : "Do zrobienia") << endl;
+    }
+    else
+    {
+        cout << "Nieprawidłowy numer podzadania." << endl;
+    }
+}
+
+int ChecklistTask::getProgress() const
+{
+    if (subtasks.empty())
+    {
+        return 0;
+    }
+
+    int completed = 0;
+    for (const auto &item : subtasks)
+    {
+        if (item.second)
+        {
+            completed++;
+        }
+    }
+
+    return (completed * 100) / static_cast<int>(subtasks.size());
+}
+
+const vector<pair<string, bool>> &ChecklistTask::getSubtasks() const
+{
+    return subtasks;
+}
