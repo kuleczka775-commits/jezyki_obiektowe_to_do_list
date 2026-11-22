@@ -53,3 +53,9 @@ string HabitTask::serialize() const
 {
     return "Habit|" + to_string(id) + "|" + title + "|" + tag + "|" + status + "|" + to_string(intervalDays) + "|" + to_string(currentStreak) + "|" + to_string(priority);
 }
+
+HabitTask &HabitTask::operator++()
+{
+    completeHabit();
+    return *this;
+}

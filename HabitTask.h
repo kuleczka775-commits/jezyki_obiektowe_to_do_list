@@ -24,4 +24,6 @@ public:
     string getType() const override;
     string getSummary() const override;
     string serialize() const override;
+
+    HabitTask &operator++();
 };

@@ -1,5 +1,6 @@
 #include "DeadlineTask.h"
 #include <iostream>
+#include <ctime>
 
 using namespace std;
 
@@ -40,4 +41,26 @@ string DeadlineTask::getSummary() const
 string DeadlineTask::serialize() const
 {
     return "Deadline|" + to_string(id) + "|" + title + "|" + tag + "|" + status + "|" + dueDate + "|" + to_string(priority);
+}
+
+DeadlineTask DeadlineTask::operator+(int days) const
+{
+    DeadlineTask shiftedTask = *this;
+
+    if (dueDate.length() == 10 && dueDate[4] == '-' && dueDate[7] == '-')
+    {
+        tm dateStruct = {};
+        dateStruct.tm_year = stoi(dueDate.substr(0, 4)) - 1900;
+        dateStruct.tm_mon = stoi(dueDate.substr(5, 2)) - 1;
+        dateStruct.tm_mday = stoi(dueDate.substr(8, 2)) + days;
+        dateStruct.tm_isdst = -1;
+
+        mktime(&dateStruct);
+
+        char buffer[11];
+        strftime(buffer, sizeof(buffer), "%Y-%m-%d", &dateStruct);
+        shiftedTask.dueDate = string(buffer);
+    }
+
+    return shiftedTask;
 }

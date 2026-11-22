@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <iostream>
 
 using namespace std;
 
@@ -26,4 +27,8 @@ public:
     virtual string getType() const = 0;
     virtual string getSummary() const = 0;
     virtual string serialize() const = 0;
+
+    bool operator<(const Task &other) const;
+    bool operator==(const Task &other) const;
+    friend ostream &operator<<(ostream &os, const Task &task);
 };

@@ -21,4 +21,6 @@ public:
     string getType() const override;
     string getSummary() const override;
     string serialize() const override;
+
+    DeadlineTask operator+(int days) const;
 };
