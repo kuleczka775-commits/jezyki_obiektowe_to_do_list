@@ -1,10 +1,12 @@
 #include "HabitTask.h"
+#include "Exceptions.h"
 #include <iostream>
 
 using namespace std;
 
 HabitTask::HabitTask(int id, string title, string tag, int intervalDays) : Task(id, title, tag), intervalDays(intervalDays), currentStreak(0)
 {
+    validatePriority(priority);
     cout << "Utworzono nowy nawyk:" << title << "powatarzany co " << intervalDays << " dni" << endl;
 }
 
@@ -15,6 +17,7 @@ int HabitTask::getPriority() const
 
 void HabitTask::setPriority(int newPriority)
 {
+    validatePriority(newPriority);
     priority = newPriority;
 }
 

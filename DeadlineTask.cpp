@@ -1,4 +1,5 @@
 #include "DeadlineTask.h"
+#include "Exceptions.h"
 #include <iostream>
 #include <ctime>
 
@@ -6,6 +7,8 @@ using namespace std;
 
 DeadlineTask::DeadlineTask(int id, string title, string tag, string dueDate) : Task(id, title, tag), dueDate(dueDate)
 {
+    validateDate(dueDate);
+    validatePriority(priority);
     cout << "Utworzono nowe zadanie z terminem:" << title << endl;
 }
 
@@ -16,6 +19,7 @@ int DeadlineTask::getPriority() const
 
 void DeadlineTask::setPriority(int newPriority)
 {
+    validatePriority(newPriority);
     priority = newPriority;
 }
 
@@ -26,6 +30,7 @@ string DeadlineTask::getDueDate() const
 
 void DeadlineTask::setDueDate(string newDueDate)
 {
+    validateDate(newDueDate);
     dueDate = newDueDate;
 }
 

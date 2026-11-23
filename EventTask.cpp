@@ -1,10 +1,12 @@
 #include "EventTask.h"
+#include "Exceptions.h"
 #include <iostream>
 
 using namespace std;
 
 EventTask::EventTask(int id, string title, string tag, string date, string startTime, string endTime, string location) : Task(id, title, tag), date(date), startTime(startTime), endTime(endTime), location(location)
 {
+    validateDate(date);
     cout << "Utworzono nowe wydarzenie: " << title << " (" << date << ", " << startTime << " - " << endTime << ", miejsce: " << location << ")" << endl;
 }
 
@@ -30,6 +32,7 @@ string EventTask::getLocation() const
 
 void EventTask::setDate(string newDate)
 {
+    validateDate(newDate);
     date = newDate;
 }
 

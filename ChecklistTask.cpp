@@ -1,10 +1,12 @@
 #include "ChecklistTask.h"
+#include "Exceptions.h"
 #include <iostream>
 
 using namespace std;
 
 ChecklistTask::ChecklistTask(int id, string title, string tag, int priority) : Task(id, title, tag), priority(priority)
 {
+    validatePriority(priority);
     cout << "Utworzono nową listę zadań: " << title << " (priorytet: " << priority << ")" << endl;
 }
 
@@ -15,6 +17,7 @@ int ChecklistTask::getPriority() const
 
 void ChecklistTask::setPriority(int newPriority)
 {
+    validatePriority(newPriority);
     priority = newPriority;
 }
 
