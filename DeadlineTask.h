@@ -10,7 +10,7 @@ private:
     int priority;
 
 public:
-    DeadlineTask(int id, string title, string tag, string dueDate);
+    DeadlineTask(int id, string title, string tag, string dueDate, int priority);
 
     int getPriority() const override;
     void setPriority(int newPriority);

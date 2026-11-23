@@ -11,7 +11,7 @@ private:
     int priority;
 
 public:
-    HabitTask(int id, string title, string tag, int intervalDays);
+    HabitTask(int id, string title, string tag, int intervalDays, int priority);
 
     int getPriority() const override;
     void setPriority(int newPriority);
