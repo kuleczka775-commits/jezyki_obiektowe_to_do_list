@@ -1,6 +1,7 @@
 #include "TaskManager.h"
 #include "DeadlineTask.h"
 #include "HabitTask.h"
+#include "ChecklistTask.h"
 #include "Exceptions.h"
 #include <iostream>
 #include <algorithm>
@@ -172,4 +173,143 @@ void TaskManager::displayTaskById(int id) const
     {
         cout << "Błąd: " << e.what() << endl;
     }
+}
+
+vector<Task *> TaskManager::getTaskByStatus(const string &status) const
+{
+    vector<Task *> filtered;
+    for (Task *task : tasks)
+    {
+        if (task->getStatus() == status)
+        {
+            filtered.push_back(task);
+        }
+    }
+    return filtered;
+}
+vector<Task *> TaskManager::getTasksByTag(const string &tag) const
+{
+    vector<Task *> filtered;
+    for (Task *task : tasks)
+    {
+        if (task->getTag() == tag)
+        {
+            filtered.push_back(task);
+        }
+    }
+    return filtered;
+}
+TaskStats TaskManager::calculateStats() const
+{
+    TaskStats stats;
+    stats.totalTasks = static_cast<int>(tasks.size());
+
+    for (Task *task : tasks)
+    {
+        string status = task->getStatus();
+        if (status == "Do zrobienia")
+        {
+            stats.todoCount++;
+        }
+        else if (status == "W trakcie")
+        {
+            stats.inProgressCount++;
+        }
+        else if (status == "Zrobione")
+        {
+            stats.doneCount++;
+        }
+
+        stats.countByTag[task->getTag()]++;
+
+        if (HabitTask *habit = dynamic_cast<HabitTask *>(task))
+        {
+            if (habit->getCurrentStreak() > stats.maxStreak)
+            {
+                stats.maxStreak = habit->getCurrentStreak();
+                stats.bestHabitTitle = habit->getTitle();
+            }
+        }
+
+        if (ChecklistTask *checklist = dynamic_cast<ChecklistTask *>(task))
+        {
+            for (const auto &sub : checklist->getSubtasks())
+            {
+                stats.totalSubtasks++;
+                if (sub.second)
+                {
+                    stats.completedSubtasks++;
+                }
+            }
+        }
+    }
+
+    if (stats.totalTasks > 0)
+    {
+        stats.completionPercent = (stats.doneCount * 100) / stats.totalTasks;
+    }
+
+    return stats;
+}
+void TaskManager::displayBoardView() const
+{
+    string columns[] = {"Do zrobienia", "W trakcie", "Zrobione"};
+
+    cout << "\n================ WIDOK TABLICY =================" << endl;
+    for (const string &col : columns)
+    {
+        vector<Task *> colTasks = getTaskByStatus(col);
+        cout << "\n--- " << col << " (" << colTasks.size() << ") ---" << endl;
+
+        if (colTasks.empty())
+        {
+            cout << "  (brak zadań)" << endl;
+        }
+        else
+        {
+            for (const Task *task : colTasks)
+            {
+                cout << "  " << *task << endl;
+            }
+        }
+    }
+    cout << "================================================" << endl;
+}
+void TaskManager::displayStats() const
+{
+    TaskStats stats = calculateStats();
+
+    cout << "\n============== PANEL STATYSTYK =================" << endl;
+    cout << "Wszystkie zadania: " << stats.totalTasks << endl;
+    cout << "  Do zrobienia: " << stats.todoCount << " | W trakcie: " << stats.inProgressCount << " | Zrobione: " << stats.doneCount << endl;
+
+    int filled = stats.completionPercent / 5;
+    cout << "Postęp ogólny: [";
+    for (int i = 0; i < 20; i++)
+    {
+        cout << (i < filled ? '#' : '-');
+    }
+    cout << "] " << stats.completionPercent << "%" << endl;
+
+    cout << "Najdłuższy streak nawyku: " << stats.maxStreak << " dni (" << stats.bestHabitTitle << ")" << endl;
+
+    if (stats.totalSubtasks > 0)
+    {
+        cout << "Ukończone podzadania: "
+             << stats.completedSubtasks << "/" << stats.totalSubtasks << endl;
+    }
+
+    cout << "Podział według tagów:" << endl;
+    if (stats.countByTag.empty())
+    {
+        cout << "  (brak tagów)" << endl;
+    }
+    else
+    {
+        for (const auto &entry : stats.countByTag)
+        {
+            cout << "  - " << entry.first << ": " << entry.second << endl;
+        }
+    }
+    cout << "================================================" << endl;
 }

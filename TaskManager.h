@@ -2,8 +2,23 @@
 #include "Task.h"
 #include <vector>
 #include <string>
+#include <map>
 
 using namespace std;
+
+struct TaskStats
+{
+    int totalTasks = 0;
+    int todoCount = 0;
+    int inProgressCount = 0;
+    int doneCount = 0;
+    int completionPercent = 0;
+    int maxStreak = 0;
+    string bestHabitTitle = "Brak";
+    int totalSubtasks = 0;
+    int completedSubtasks = 0;
+    map<string, int> countByTag;
+};
 
 class TaskManager
 {
@@ -33,4 +48,10 @@ public:
     bool completeHabit(int id);
     void displayAll() const;
     void displayTaskById(int id) const;
+
+    vector<Task *> getTaskByStatus(const string &status) const;
+    vector<Task *> getTasksByTag(const string &tag) const;
+    TaskStats calculateStats() const;
+    void displayBoardView() const;
+    void displayStats() const;
 };
