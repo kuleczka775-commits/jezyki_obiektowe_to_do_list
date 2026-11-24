@@ -3,6 +3,7 @@
 #include <windows.h>
 #endif
 
+#include "GuiApp.h"
 #include "TaskManager.h"
 #include "FileManager.h"
 #include "DeadlineTask.h"
@@ -169,8 +170,8 @@ void handleChangeStatus(TaskManager &manager)
 void handleSpecialActions(TaskManager &manager)
 {
     cout << "\n--- AKCJE SPECJALNE ---" << endl;
-    cout << "1. Przesuń termin zadania o X dni (operator +)" << endl;
-    cout << "2. Zalicz nawyk i podbij streak (operator ++)" << endl;
+    cout << "1. Przesuń termin zadania o X dni" << endl;
+    cout << "2. Zalicz nawyk i podbij streak" << endl;
     cout << "3. Odhacz podzadanie w checkliscie" << endl;
     cout << "4. Dodaj nowe podzadanie do istniejącej checklisty" << endl;
 
@@ -270,7 +271,7 @@ void handleSearchAndFilter(const TaskManager &manager)
     }
 }
 
-int main()
+int main(int argc, char *argv[])
 {
 #ifdef _WIN32
     SetConsoleOutputCP(65001);
@@ -287,6 +288,15 @@ int main()
     catch (const FileException &e)
     {
         cout << "Informacja: " << e.what() << " (start z pustą listą zadań)." << endl;
+    }
+
+    bool consoleMode = (argc > 1 && string(argv[1]) == "--console");
+
+    if (!consoleMode)
+    {
+        GuiApp app(manager, fileManager);
+        app.run();
+        return 0;
     }
 
     int choice = -1;
