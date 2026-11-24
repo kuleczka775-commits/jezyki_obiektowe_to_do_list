@@ -32,6 +32,219 @@ Zachowany w pełni jako alternatywny tryb uruchamiany flagą `--console`.
 * `FileManager.h / .cpp` – odczyt i zapis do pliku `tasks.txt`
 * `Exceptions.h` – własne klasy wyjątków
 
+## Schemat klas UML
+
+```mermaid
+classDiagram
+    class Task {
+        <<abstract>>
+        #int id
+        #string title
+        #string tag
+        #string status
+        +Task(int id, string title, string tag)
+        +~Task()
+        +setStatus(string newStatus) void
+        +getTitle() string const
+        +getId() int const
+        +getTag() string const
+        +getStatus() string const
+        +getPriority() int const
+        +getType()* string
+        +getSummary()* string
+        +serialize()* string
+        +operator<(Task other) bool const
+        +operator==(Task other) bool const
+        +friend operator<<(ostream os, Task task) ostream
+    }
+
+    class DeadlineTask {
+        -string dueDate
+        -int priority
+        +DeadlineTask(int id, string title, string tag, string dueDate, int priority)
+        +getDueDate() string const
+        +getPriority() int const
+        +getType() string const
+        +getSummary() string const
+        +serialize() string const
+        +operator+(int days) DeadlineTask const
+    }
+
+    class HabitTask {
+        -int intervalDays
+        -int currentStreak
+        -int priority
+        +HabitTask(int id, string title, string tag, int intervalDays, int priority)
+        +getCurrentStreak() int const
+        +setCurrentStreak(int streak) void
+        +getPriority() int const
+        +getType() string const
+        +getSummary() string const
+        +serialize() string const
+        +operator++() HabitTask
+    }
+
+    class EventTask {
+        -string date
+        -string startTime
+        -string endTime
+        -string location
+        +EventTask(int id, string title, string tag, string date, string startTime, string endTime, string location)
+        +getType() string const
+        +getSummary() string const
+        +serialize() string const
+    }
+
+    class ChecklistTask {
+        -int priority
+        -vector~pair~ subtasks
+        +ChecklistTask(int id, string title, string tag, int priority)
+        +addSubtask(string name, bool done) void
+        +getSubtasks() vector~pair~ const
+        +getPriority() int const
+        +getType() string const
+        +getSummary() string const
+        +serialize() string const
+    }
+
+    class TaskStats {
+        <<struct>>
+        +int totalTasks
+        +int todoCount
+        +int inProgressCount
+        +int doneCount
+        +int completionPercent
+        +int maxStreak
+        +string bestHabitTitle
+        +int totalSubtasks
+        +int completedSubtasks
+        +map~string, int~ countByTag
+    }
+
+    class TaskManager {
+        -vector~Task*~ tasks
+        -int nextId
+        +TaskManager()
+        +~TaskManager()
+        +getNextId() int const
+        +getTasks() vector~Task*~ const
+        +clearTasks() void
+        +addTask(Task* task) bool
+        +removeTask(int id) void
+        +findTaskById(int id) Task* const
+        +searchByTitle(string keyword) vector~Task*~ const
+        +changeStatus(int id, string newStatus) void
+        +sortTasks() void
+        +postponeDeadline(int id, int days) bool
+        +completeHabit(int id) bool
+        +displayAll() void const
+        +displayTaskById(int id) void const
+        +getTaskByStatus(string status) vector~Task*~ const
+        +getTasksByTag(string tag) vector~Task*~ const
+        +calculateStats() TaskStats const
+        +displayBoardView() void const
+        +displayStats() void const
+    }
+
+    class FileManager {
+        -string filename
+        -split(string text, char delimiter) vector~string~ const
+        +FileManager(string filename)
+        +saveToFile(TaskManager manager) void const
+        +loadFromFile(TaskManager manager) void const
+    }
+
+    class AppView {
+        <<enumeration>>
+        LIST
+        BOARD
+        STATS
+        ADD
+    }
+
+    class GuiApp {
+        -TaskManager& manager
+        -FileManager& fileManager
+        -int screenWidth
+        -int screenHeight
+        -AppView currentView
+        -float listScrollY
+        -float boardScrollY[3]
+        -char searchBuf[128]
+        -int filterType
+        -int activeInput
+        -int addingSubtaskTaskId
+        -char newSubtaskBuf[128]
+        -int formType
+        -int formPriority
+        -char formTitle[128]
+        -char formTag[64]
+        -char formDate[32]
+        -char formInterval[16]
+        -char formStartTime[16]
+        -char formEndTime[16]
+        -char formLocation[128]
+        -char formSubtasks[256]
+        -string statusMessage
+        -float statusTimer
+        -bool statusIsError
+        -drawSidebar() void
+        -drawMainContent() void
+        -drawListView(float x, float y, float w, float h) void
+        -drawBoardView(float x, float y, float w, float h) void
+        -drawStatsView(float x, float y, float w, float h) void
+        -drawAddTaskView(float x, float y, float w, float h) void
+        -resetAddForm() void
+        -getNextTaskId() int const
+        -showStatus(string msg, bool isError) void
+        +GuiApp(TaskManager manager, FileManager fileManager, int width, int height)
+        +run() void
+    }
+
+    class StdRuntimeError["std::runtime_error"] {
+        <<exception>>
+    }
+
+    class FileException {
+        <<exception>>
+        +FileException(string msg)
+    }
+
+    class TaskNotFoundException {
+        <<exception>>
+        +TaskNotFoundException(string msg)
+    }
+
+    %% Dziedziczenie
+    Task <|-- DeadlineTask
+    Task <|-- HabitTask
+    Task <|-- EventTask
+    Task <|-- ChecklistTask
+    StdRuntimeError <|-- FileException
+    StdRuntimeError <|-- TaskNotFoundException
+
+    %% Kompozycja (TaskManager zarzadza cyklem zycia obiektow Task)
+    TaskManager "1" *-- "0..*" Task : przechowuje i zwalnia
+
+    %% Agregacja (GuiApp korzysta z zewnetrznych obiektow przez referencje)
+    GuiApp "1" o-- "1" TaskManager : referencja
+    GuiApp "1" o-- "1" FileManager : referencja
+
+    %% Asocjacje i zaleznosci
+    GuiApp --> AppView : aktualny widok
+    TaskManager ..> TaskStats : zwraca
+    TaskManager ..> TaskNotFoundException : rzuca
+    FileManager ..> TaskManager : zapisuje / wczytuje
+    FileManager ..> Task : serializuje / tworzy
+    FileManager ..> FileException : rzuca
+```
+
+### Relacje w projekcie
+* **Dziedziczenie (`<|--`):** `DeadlineTask`, `HabitTask`, `EventTask` oraz `ChecklistTask` dziedziczą po abstrakcyjnej klasie bazowej `Task`, implementując jej metody czysto wirtualne (`getType`, `getSummary`, `serialize`). Klasy `FileException` i `TaskNotFoundException` dziedziczą po `std::runtime_error`.
+* **Kompozycja (`*--`):** `TaskManager` jest właścicielem wskaźników `Task*` i odpowiada za ich cykl życia — zniszczenie `TaskManager` automatycznie zwalnia wszystkie przechowywane zadania w destruktorze (`clearTasks()`).
+* **Agregacja (`o--`):** `GuiApp` przechowuje referencje (`TaskManager&`, `FileManager&`) do obiektów utworzonych w `main()`. Zamknięcie interfejsu graficznego nie niszczy tych obiektów — ich cykl życia jest niezależny od `GuiApp`.
+* **Zależności (`..>`):** `FileManager` korzysta z `TaskManager` i `Task` podczas zapisu/odczytu oraz rzuca `FileException`; `TaskManager` tworzy strukturę `TaskStats` i rzuca `TaskNotFoundException`.
+
 ## Wymagania i instalacja zależności (Windows / MSYS2 UCRT64)
 
 1. Zainstaluj bibliotekę Raylib w terminalu **MSYS2 UCRT64**:
