@@ -103,13 +103,13 @@ void FileManager::loadFromFile(TaskManager &manager) const
 
             Task *task = nullptr;
 
-            if (type == "DEADLINE" && fields.size() >= 7)
+            if (type == "Deadline" && fields.size() >= 7)
             {
                 string dueDate = fields[5];
                 int priority = stoi(fields[6]);
                 task = new DeadlineTask(id, title, tag, dueDate, priority);
             }
-            else if (type == "HABIT" && fields.size() >= 8)
+            else if (type == "Habit" && fields.size() >= 8)
             {
                 int intervalDays = stoi(fields[5]);
                 int currentStreak = stoi(fields[6]);
@@ -119,7 +119,7 @@ void FileManager::loadFromFile(TaskManager &manager) const
                 habit->setCurrentStreak(currentStreak);
                 task = habit;
             }
-            else if (type == "EVENT" && fields.size() >= 9)
+            else if (type == "Event" && fields.size() >= 9)
             {
                 string date = fields[5];
                 string startTime = fields[6];
@@ -127,7 +127,7 @@ void FileManager::loadFromFile(TaskManager &manager) const
                 string location = fields[8];
                 task = new EventTask(id, title, tag, date, startTime, endTime, location);
             }
-            else if (type == "CHECKLIST" && fields.size() >= 6)
+            else if (type == "Checklist" && fields.size() >= 6)
             {
                 int priority = stoi(fields[5]);
                 ChecklistTask *checklist = new ChecklistTask(id, title, tag, priority);

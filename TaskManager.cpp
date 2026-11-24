@@ -255,7 +255,7 @@ void TaskManager::displayBoardView() const
 {
     string columns[] = {"Do zrobienia", "W trakcie", "Zrobione"};
 
-    cout << "\n================ WIDOK TABLICY =================" << endl;
+    cout << "================ WIDOK TABLICY =================" << endl;
     for (const string &col : columns)
     {
         vector<Task *> colTasks = getTaskByStatus(col);
@@ -279,7 +279,7 @@ void TaskManager::displayStats() const
 {
     TaskStats stats = calculateStats();
 
-    cout << "\n============== PANEL STATYSTYK =================" << endl;
+    cout << "============== PANEL STATYSTYK =================" << endl;
     cout << "Wszystkie zadania: " << stats.totalTasks << endl;
     cout << "  Do zrobienia: " << stats.todoCount << " | W trakcie: " << stats.inProgressCount << " | Zrobione: " << stats.doneCount << endl;
 

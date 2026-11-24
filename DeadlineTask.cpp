@@ -5,11 +5,11 @@
 
 using namespace std;
 
-DeadlineTask::DeadlineTask(int id, string title, string tag, string dueDate) : Task(id, title, tag), dueDate(dueDate)
+DeadlineTask::DeadlineTask(int id, string title, string tag, string dueDate, int priority) : Task(id, title, tag), dueDate(dueDate), priority(priority)
 {
     validateDate(dueDate);
     validatePriority(priority);
-    cout << "Utworzono nowe zadanie z terminem:" << title << endl;
+    cout << "Utworzono nowe zadanie z terminem: " << title << " (priorytet: " << priority << ")" << endl;
 }
 
 int DeadlineTask::getPriority() const
@@ -41,7 +41,7 @@ string DeadlineTask::getType() const
 
 string DeadlineTask::getSummary() const
 {
-    return "Termin" + dueDate + "| Priorytet: " + to_string(priority);
+    return "Termin: " + dueDate + " | Priorytet: " + to_string(priority);
 }
 string DeadlineTask::serialize() const
 {

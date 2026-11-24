@@ -21,7 +21,7 @@ void ChecklistTask::setPriority(int newPriority)
     priority = newPriority;
 }
 
-void ChecklistTask::addSubtask(string name, bool isDone = false)
+void ChecklistTask::addSubtask(string name, bool isDone)
 {
     subtasks.push_back({name, isDone});
     cout << "Dodano podzadanie: " << name << endl;

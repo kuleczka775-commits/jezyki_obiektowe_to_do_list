@@ -4,10 +4,10 @@
 
 using namespace std;
 
-HabitTask::HabitTask(int id, string title, string tag, int intervalDays) : Task(id, title, tag), intervalDays(intervalDays), currentStreak(0)
+HabitTask::HabitTask(int id, string title, string tag, int intervalDays, int priority) : Task(id, title, tag), intervalDays(intervalDays), currentStreak(0), priority(priority)
 {
     validatePriority(priority);
-    cout << "Utworzono nowy nawyk:" << title << "powatarzany co " << intervalDays << " dni" << endl;
+    cout << "Utworzono nowy nawyk: " << title << " (co " << intervalDays << " dni, priorytet: " << priority << ")" << endl;
 }
 
 int HabitTask::getPriority() const
@@ -49,7 +49,8 @@ string HabitTask::getType() const
 
 string HabitTask::getSummary() const
 {
-    return "Co" + to_string(intervalDays) + " dni | Streak: " + to_string(currentStreak) + " | Priorytet: " + to_string(priority);
+    string freq = (intervalDays == 1) ? "Codziennie" : ("Co: " + to_string(intervalDays) + " dni");
+    return freq + " | Streak: " + to_string(currentStreak) + " | Priorytet: " + to_string(priority);
 }
 
 string HabitTask::serialize() const
