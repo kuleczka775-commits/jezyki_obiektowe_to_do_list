@@ -1,5 +1,43 @@
-*.o
+# Pliki wykonywalne, obiekty i biblioteki kompilacji
 *.exe
 *.out
+*.o
+*.obj
+*.dll
+*.a
+*.pdb
+build/
+task_manager
+
+# Plik z lokalnymi danymi uzytkownika
+tasks.txt
+
+# Konfiguracja edytora i IDE
 .vscode/
-cmake-build-debug/
+.idea/
+
+# Pliki systemowe i logi
+.DS_Store
+Thumbs.db
+*.log
+
+
+# wersja dla wyświetlania wyłącznie w konsoli
+
+# # Pliki wykonywalne i kompilacji
+# *.exe
+# *.out
+# *.o
+# *.obj
+# task_manager
+
+# # Plik z lokalnymi danymi uzytkownika
+# tasks.txt
+
+# # Konfiguracja edytora i IDE
+# .vscode/
+# .idea/
+
+# # Pliki systemowe
+# .DS_Store
+# Thumbs.db
